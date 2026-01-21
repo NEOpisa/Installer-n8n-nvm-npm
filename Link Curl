@@ -1,0 +1,2 @@
+//Terminal code Installer
+curl -fsSL https://github.com/NeoOS-Dev/Installer-n8n-nvm-npm/blob/main/Install-N8N | bash
