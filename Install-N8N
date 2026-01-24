@@ -1,38 +1,122 @@
-
 #!/usr/bin/env bash
-set -euo pipefail
+set -Eeuo pipefail
 
-echo "=============================="
-echo " n8n Installer npm"
-echo "=============================="
+GREEN="\033[0;32m"
+BLUE="\033[1;34m"
+YELLOW="\033[1;33m"
+RED="\033[0;31m"
+BOLD="\033[1m"
+RESET="\033[0m"
 
-if ! command -v curl &>/dev/null; then
-  echo "curl não está instalado."
+line() {
+  echo -e "${BOLD}===================================================================${RESET}"
+}
+line2() {
+  echo -e "===================================================================${RESET}"
+}
+
+info() {
+  echo -e "${BLUE}➜${RESET} $1"
+}
+
+success() {
+  echo -e "${GREEN}✔${RESET} $1"
+}
+
+warn() {
+  echo -e "${YELLOW}⚠${RESET} $1"
+}
+
+error() {
+  echo -e "${RED}✖${RESET} $1"
   exit 1
-fi
+}
+echo -e "NNNNNNNN        NNNNNNNN     888888888     NNNNNNNN        NNNNNNNN
+N:::::::N       N::::::N   88:::::::::88   N:::::::N       N::::::N
+N::::::::N      N::::::N 88:::::::::::::88 N::::::::N      N::::::N
+N:::::::::N     N::::::N8::::::88888::::::8N:::::::::N     N::::::N
+N::::::::::N    N::::::N8:::::8     8:::::8N::::::::::N    N::::::N
+N:::::::::::N   N::::::N8:::::8     8:::::8N:::::::::::N   N::::::N
+N:::::::N::::N  N::::::N 8:::::88888:::::8 N:::::::N::::N  N::::::N
+N::::::N N::::N N::::::N  8:::::::::::::8  N::::::N N::::N N::::::N
+N::::::N  N::::N:::::::N 8:::::88888:::::8 N::::::N  N::::N:::::::N
+N::::::N   N:::::::::::N8:::::8     8:::::8N::::::N   N:::::::::::N
+N::::::N    N::::::::::N8:::::8     8:::::8N::::::N    N::::::::::N
+N::::::N     N:::::::::N8:::::8     8:::::8N::::::N     N:::::::::N
+N::::::N      N::::::::N8::::::88888::::::8N::::::N      N::::::::N
+N::::::N       N:::::::N 88:::::::::::::88 N::::::N       N:::::::N
+N::::::N        N::::::N   88:::::::::88   N::::::N        N::::::N
+NNNNNNNN         NNNNNNN     888888888     NNNNNNNN         NNNNNNN${RESET}"
+line
+echo -e "${BOLD}${BLUE}n8n-Installer
+By-Mizael${RESET}"
+line
 
-echo "Instalando NVM..."
-curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 
+command -v curl &>/dev/null || error "curl is not installed."
+command -v git &>/dev/null || error "git is not installed."
+
+
+echo ""
+line2
+info "Detecting latest versions..."
+line2
+
+LATEST_NVM=$(curl -fsSL https://api.github.com/repos/nvm-sh/nvm/releases/latest | grep -Po '"tag_name": "\Kv[^"]+')
+LATEST_N8N=$(npm view n8n version 2>/dev/null || echo "unknown")
+
+# NVM
 export NVM_DIR="$HOME/.nvm"
 
 if [[ -s "$NVM_DIR/nvm.sh" ]]; then
   # shellcheck disable=SC1090
   source "$NVM_DIR/nvm.sh"
+  INSTALLED_NVM=$(nvm --version)
+
+  if [[ "v$INSTALLED_NVM" != "$LATEST_NVM" ]]; then
+    warn "NVM outdated (installed: v$INSTALLED_NVM, latest: $LATEST_NVM)"
+    curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/${LATEST_NVM}/install.sh" | bash
+    success "NVM updated to $LATEST_NVM"
+  else
+    success "NVM is up to date ($LATEST_NVM)"
+  fi
 else
-  echo "NVM não foi instalado corretamente."
-  exit 1
+  warn "NVM not found. Installing..."
+  curl -fsSL "https://raw.githubusercontent.com/nvm-sh/nvm/${LATEST_NVM}/install.sh" | bash
+  source "$NVM_DIR/nvm.sh"
+  success "NVM installed ($LATEST_NVM)"
 fi
 
-echo "Instalando Node.js 24..."
-nvm install 24
-nvm use 24
-nvm alias default 24
+# Node.js (LTS)
+info "Checking Node.js LTS..."
 
-echo "Instalando n8n..."
-npm install -g n8n
+nvm install --lts --default >/dev/null
 
-echo "=============================="
-echo " Instalação concluída com sucesso"
-echo " Reinicie o terminal"
-echo "=============================="
+NODE_INSTALLED=$(node -v)
+success "Node.js ready ($NODE_INSTALLED)"
+
+# n8n
+if command -v n8n &>/dev/null; then
+  INSTALLED_N8N=$(n8n --version)
+
+  if [[ "$INSTALLED_N8N" != "$LATEST_N8N" ]]; then
+    warn "n8n outdated (installed: $INSTALLED_N8N, latest: $LATEST_N8N)"
+    npm install -g n8n >/dev/null
+    success "n8n updated to $LATEST_N8N"
+  else
+    success "n8n is up to date ($INSTALLED_N8N)"
+  fi
+else
+  warn "n8n not found. Installing..."
+  npm install -g n8n >/dev/null
+  line2
+  success "n8n installed ($LATEST_N8N)"
+  line2
+fi
+
+
+line
+success "System is ready. No further action required."
+line
+
+exit 0
