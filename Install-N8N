@@ -33,22 +33,22 @@ error() {
 }
 echo -e "
 "
-echo -e "NNNNNNNN        NNNNNNNN     888888888     NNNNNNNN        NNNNNNNN
-N:::::::N       N::::::N   88:::::::::88   N:::::::N       N::::::N
-N::::::::N      N::::::N 88:::::::::::::88 N::::::::N      N::::::N
-N:::::::::N     N::::::N8::::::88888::::::8N:::::::::N     N::::::N
-N::::::::::N    N::::::N8:::::8     8:::::8N::::::::::N    N::::::N
-N:::::::::::N   N::::::N8:::::8     8:::::8N:::::::::::N   N::::::N
-N:::::::N::::N  N::::::N 8:::::88888:::::8 N:::::::N::::N  N::::::N
-N::::::N N::::N N::::::N  8:::::::::::::8  N::::::N N::::N N::::::N
-N::::::N  N::::N:::::::N 8:::::88888:::::8 N::::::N  N::::N:::::::N
-N::::::N   N:::::::::::N8:::::8     8:::::8N::::::N   N:::::::::::N
-N::::::N    N::::::::::N8:::::8     8:::::8N::::::N    N::::::::::N
-N::::::N     N:::::::::N8:::::8     8:::::8N::::::N     N:::::::::N
-N::::::N      N::::::::N8::::::88888::::::8N::::::N      N::::::::N
-N::::::N       N:::::::N 88:::::::::::::88 N::::::N       N:::::::N
-N::::::N        N::::::N   88:::::::::88   N::::::N        N::::::N
-NNNNNNNN         NNNNNNN     888888888     NNNNNNNN         NNNNNNN${RESET}"
+echo -e "NNNNNNNN        NNNNNNNN      888888888      NNNNNNNN        NNNNNNNN
+N       N       N      N    88:::::::::88    N       N       N      N
+N        N      N      N  88:::::::::::::88  N        N      N      N
+N         N     N      N 8::::::88888::::::8 N         N     N      N
+N          N    N      N 8:::::8     8:::::8 N          N    N      N
+N           N   N      N 8:::::8     8:::::8 N           N   N      N
+N       N    N  N      N  8:::::88888:::::8  N       N    N  N      N
+N      N N    N N      N   8:::::::::::::8   N      N N    N N      N
+N      N  N    N       N  8:::::88888:::::8  N      N  N    N       N
+N      N   N           N 8:::::8     8:::::8 N      N   N           N
+N      N    N          N 8:::::8     8:::::8 N      N    N          N
+N      N     N         N 8:::::8     8:::::8 N      N     N         N
+N      N      N        N 8::::::88888::::::8 N      N      N        N
+N      N       N       N 88:::::::::::::88   N      N       N       N
+N      N        N      N    88:::::::::88    N      N        N      N
+NNNNNNNN         NNNNNNN      888888888      NNNNNNNN         NNNNNNN${RESET}"
 line
 echo -e "${BOLD}${BLUE}n8n-Installer
 By-Mizael${RESET}"
